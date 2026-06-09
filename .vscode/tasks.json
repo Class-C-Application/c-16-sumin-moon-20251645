@@ -1,0 +1,22 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "C 실행 (한번에)",
+            "type": "shell",
+            // 1. 컴파일(gcc) -> 2. 실행(./out) -> 3. 실행파일 삭제(rm out)
+            "command": "prefix=$(basename ${file} | grep -o '^[0-9]*'); labprefix=$(basename ${file} | grep -o '^lab[0-9]*-'); if [ -n \"$prefix\" ]; then gcc ${fileDirname}/${prefix}*.c -o ${fileDirname}/out.temp; elif [ -n \"$labprefix\" ]; then gcc ${fileDirname}/${labprefix}*.c -o ${fileDirname}/out.temp; else gcc ${file} -o ${fileDirname}/out.temp; fi && ${fileDirname}/out.temp && rm ${fileDirname}/out.temp",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true,
+                "focus": true
+            },
+            "problemMatcher": "$gcc"
+        }
+    ]
+}

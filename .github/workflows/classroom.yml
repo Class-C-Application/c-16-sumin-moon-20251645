@@ -1,0 +1,80 @@
+name: GitHub Classroom Workflow - Week16
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'chapter16/**'
+      - '.github/workflows/classroom.yml'
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  build:
+    name: Autograding Week16
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: week16-01-malloc
+        id: week16-01-malloc
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: week16-01-malloc
+          setup-command: gcc chapter16/01malloc.c -o w1601
+          command: ./w1601
+          input: ""
+          expected-output: "저장 값"
+          comparison-method: contains
+          timeout: 10
+          max-score: 10
+
+      - name: week16-02-arymalloc
+        id: week16-02-arymalloc
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: week16-02-arymalloc
+          setup-command: gcc chapter16/02arymalloc.c -o w1602
+          command: ./w1602
+          input: "3 90 80 70"
+          expected-output: "합: 240"
+          comparison-method: contains
+          timeout: 10
+          max-score: 10
+
+      - name: week16-03-calloc
+        id: week16-03-calloc
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: week16-03-calloc
+          setup-command: gcc chapter16/03calloc.c -o w1603
+          command: ./w1603
+          input: ""
+          expected-output: "ary[1] = 0"
+          comparison-method: contains
+          timeout: 10
+          max-score: 10
+
+      - name: week16-04-realloc
+        id: week16-04-realloc
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: week16-04-realloc
+          setup-command: gcc chapter16/04realloc.c -o w1604
+          command: ./w1604
+          input: ""
+          expected-output: "ary[0] = 10"
+          comparison-method: contains
+          timeout: 10
+          max-score: 10
+
+      - name: Autograding Reporter
+        uses: classroom-resources/autograding-grading-reporter@v1
+        continue-on-error: true
+        env:
+          WEEK16-01-MALLOC_RESULTS: "${{steps.week16-01-malloc.outputs.result}}"
+          WEEK16-02-ARYMALLOC_RESULTS: "${{steps.week16-02-arymalloc.outputs.result}}"
+          WEEK16-03-CALLOC_RESULTS: "${{steps.week16-03-calloc.outputs.result}}"
+          WEEK16-04-REALLOC_RESULTS: "${{steps.week16-04-realloc.outputs.result}}"
+        with:
+          runners: week16-01-malloc,week16-02-arymalloc,week16-03-calloc,week16-04-realloc
